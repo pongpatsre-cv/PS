@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PONGPAT SREKANRAYANAWAT - Professional Resume</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        /* Login Screen Styles */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .login-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-title {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+            font-weight: 600;
+        }
+
+        .login-subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .login-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.2s ease;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .error-message {
+            color: #e74c3c;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        /* Resume Container Styles */
+        .resume-container {
+            display: none;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            animation: fadeIn 0.8s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .resume-header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            position: relative;
+        }
+
+        .profile-section {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .profile-image-container {
+            position: relative;
+        }
+
+        .profile-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #667eea;
+            transition: transform 0.3s ease;
+        }
+
+        .profile-image:hover {
+            transform: scale(1.05);
+        }
+
+        .image-upload {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background 0.3s ease;
+        }
+
+        .image-upload:hover {
+            background: #5a67d8;
+        }
+
+        .profile-info h1 {
+            color: #333;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .contact-info {
+            color: #666;
+            font-size: 1.1rem;
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .contact-info span {
+            background: rgba(102, 126, 234, 0.1);
+            padding: 5px 15px;
+            border-radius: 20px;
+        }
+
+        .logout-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #c0392b;
+        }
+
+        .resume-content {
+            display: grid;
+            gap: 20px;
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .resume-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .resume-section:hover {
+            transform: translateY(-5px);
+        }
+
+        .section-title {
+            color: #333;
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 8px;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .job-entry {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(102, 126, 234, 0.05);
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .job-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+        }
+
+        .job-title {
+            font-weight: 600;
+            color: #333;
+            font-size: 1.1rem;
+        }
+
+        .job-company {
+            color: #667eea;
+            font-weight: 500;
+        }
+
+        .job-period {
+            color: #666;
+            font-size: 0.9rem;
+            background: rgba(102, 126, 234, 0.1);
+            padding: 2px 8px;
+            border-radius: 12px;
+        }
+
+        .job-description ul {
+            margin-left: 15px;
+            color: #555;
+        }
+
+        .job-description li {
+            margin-bottom: 5px;
+        }
+
+        .competency-list {
+            display: grid;
+            gap: 10px;
+        }
+
+        .competency-item {
+            padding: 12px;
+            background: rgba(102, 126, 234, 0.08);
+            border-radius: 8px;
+            border-left: 3px solid #667eea;
+        }
+
+        .competency-title {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .competency-details {
+            color: #555;
+            font-size: 0.9rem;
+            margin-top: 3px;
+        }
+
+        .education-item, .cert-item {
+            padding: 15px;
+            margin-bottom: 10px;
+            background: rgba(102, 126, 234, 0.05);
+            border-radius: 8px;
+            border-left: 3px solid #667eea;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .resume-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .profile-section {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .profile-info h1 {
+                font-size: 2rem;
+            }
+            
+            .contact-info {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .job-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .logout-btn {
+                position: static;
+                margin-bottom: 20px;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background: white;
+            }
+            
+            .resume-container {
+                display: block !important;
+            }
+            
+            .login-container {
+                display: none;
+            }
+            
+            .logout-btn, .image-upload {
+                display: none;
+            }
+            
+            .resume-section {
+                background: white;
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="loginContainer" class="login-container">
+        <div class="login-card">
+            <h2 class="login-title">🔐 Access Required</h2>
+            <p class="login-subtitle">Please enter the password to view the resume</p>
+            <form id="loginForm">
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" class="login-btn">Access Resume</button>
+                <div id="errorMessage" class="error-message hidden"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Resume Content -->
+    <div id="resumeContainer" class="resume-container">
+        <!-- Header Section -->
+        <div class="resume-header">
+            <button class="logout-btn" onclick="logout()">Logout</button>
+            
+            <div class="profile-section">
+                <div class="profile-image-container">
+                    <img id="profileImage" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgdmlld0JveD0iMCAwIDE1MCAxNTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxNTAiIGhlaWdodD0iMTUwIiBmaWxsPSIjZjBmMGYwIi8+CjxjaXJjbGUgY3g9Ijc1IiBjeT0iNjAiIHI9IjI1IiBmaWxsPSIjNjY3ZWVhIi8+CjxwYXRoIGQ9Im0zMCAxMjBjMC0yNSAyMC00NSA0NS00NXM0NSAyMCA0NSA0NSIgZmlsbD0iIzY2N2VlYSIvPgo8L3N2Zz4K" alt="Profile Image" class="profile-image">
+                    <button class="image-upload" onclick="document.getElementById('imageInput').click()" title="Upload Photo">📷</button>
+                    <input type="file" id="imageInput" accept="image/*" style="display: none;" onchange="uploadImage(event)">
+                </div>
+                
+                <div class="profile-info">
+                    <h1>PONGPAT SREKANRAYANAWAT</h1>
+                    <div class="contact-info">
+                        <span>📱 (+66) 87-795-4158</span>
+                        <span>📧 pongpat.sre@hotmail.com</span>
+                        <span>📍 Bangkok, Thailand</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resume Sections -->
+        <div class="resume-content">
+            <!-- Professional Summary -->
+            <div class="resume-section full-width">
+                <h3 class="section-title">Professional Summary</h3>
+                <p>A results-oriented System Engineer with extensive experience in designing, implementing, and managing robust IT infrastructure. Proficient in both cloud platforms (Azure, AWS, Google Cloud) and on-premise virtualized environments (VMware, Nutanix). Expertise in system administration, network security, and enterprise data backup solutions.</p>
+            </div>
+
+            <!-- Core Competencies -->
+            <div class="resume-section full-width">
+                <h3 class="section-title">Core Competencies</h3>
+                <div class="competency-list">
+                    <div class="competency-item">
+                        <div class="competency-title">☁️ Cloud Platforms</div>
+                        <div class="competency-details">Microsoft Azure (Entra ID, vNet, WAF, M365), AWS (EC2, S3, VPC), Google Cloud (Compute Engine, Cloud Storage), HPE GreenLake</div>
+                    </div>
+                    <div class="competency-item">
+                        <div class="competency-title">🖥️ Virtualization & Servers</div>
+                        <div class="competency-details">VMware (vCenter, ESXi, vSAN, Horizon), Nutanix (AHV), Windows Server (AD, GPO, DNS, DHCP, IIS)</div>
+                    </div>
+                    <div class="competency-item">
+                        <div class="competency-title">💾 Backup & Recovery</div>
+                        <div class="competency-details">Veeam Backup & Replication, Veritas NetBackup & Backup Exec, Nakivo, Synology Active Backup</div>
+                    </div>
+                    <div class="competency-item">
+                        <div class="competency-title">🌐 Networking & Storage</div>
+                        <div class="competency-details">FortiGate Firewall, Cisco Meraki, Aruba ClearPass, SAN Switches (Brocade), Dell & HP Storage</div>
+                    </div>
+                    <div class="competency-item">
+                        <div class="competency-title">🔒 Security Solutions</div>
+                        <div class="competency-details">Trend Micro Apex One, Symantec Endpoint Protection, Wazuh, ESET Endpoint</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Work Experience -->
+            <div class="resume-section full-width">
+                <h3 class="section-title">Work Experience</h3>
+                
+                <div class="job-entry">
+                    <div class="job-header">
+                        <div>
+                            <div class="job-title">System Engineer</div>
+                            <div class="job-company">GROWTH MORE CORPORATIONS Co., Ltd.</div>
+                        </div>
+                        <div class="job-period">2022 - Present</div>
+                    </div>
+                    <div class="job-description">
+                        <ul>
+                            <li>Administered multi-cloud infrastructure on Azure, AWS, and Google Cloud, focusing on virtual machine provisioning, network configuration, and security.</li>
+                            <li>Managed on-premise virtualization platforms, including VMware (vCenter, ESXi, vSAN) and Nutanix clusters.</li>
+                            <li>Implemented and maintained comprehensive backup solutions using Veeam, Veritas, and Nakivo for physical and virtual environments.</li>
+                            <li>Deployed and configured security and monitoring tools such as Wazuh, Trend Micro Apex One, and Aruba ClearPass.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="job-entry">
+                    <div class="job-header">
+                        <div>
+                            <div class="job-title">System Engineer</div>
+                            <div class="job-company">1 to ALL Co., Ltd.</div>
+                        </div>
+                        <div class="job-period">2022</div>
+                    </div>
+                    <div class="job-description">
+                        <ul>
+                            <li>Managed Active Directory, GPO, File Servers, and Office 365 administration.</li>
+                            <li>Configured and maintained FortiGate firewalls and various network access points (Linksys, Cisco, Unifi).</li>
+                            <li>Administered Veeam backup processes and managed the Zimbra mail server.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="job-entry">
+                    <div class="job-header">
+                        <div>
+                            <div class="job-title">IT Infrastructure</div>
+                            <div class="job-company">Modernchemical Co., Ltd. & subsidiaries</div>
+                        </div>
+                        <div class="job-period">2016 - 2022</div>
+                    </div>
+                    <div class="job-description">
+                        <ul>
+                            <li>Maintained IT infrastructure, including ERP and CRM systems, across the head office and two branch locations.</li>
+                            <li>Managed a VMware environment, Active Directory, DHCP, and FortiGate firewalls.</li>
+                            <li>Configured site-to-site VPNs and administered network hardware, including Cisco routers and Mikrotik CCR.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="job-entry">
+                    <div class="job-header">
+                        <div>
+                            <div class="job-title">IT Support Specialist</div>
+                            <div class="job-company">Pinthong Engineering Co., Ltd.</div>
+                        </div>
+                        <div class="job-period">2014 - 2016</div>
+                    </div>
+                    <div class="job-description">
+                        <ul>
+                            <li>Provided comprehensive hardware and software helpdesk support for the head office.</li>
+                            <li>Managed the company's ERP system (POJJAMAN) and maintained security systems, including CCTV and Finger Scanners.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="job-entry">
+                    <div class="job-header">
+                        <div>
+                            <div class="job-title">IT Support (Helpdesk)</div>
+                            <div class="job-company">Sukishi Intergroup Co., Ltd.</div>
+                        </div>
+                        <div class="job-period">2014</div>
+                    </div>
+                    <div class="job-description">
+                        <ul>
+                            <li>Delivered onsite and remote IT support for head office and branch locations, including SAP software setup.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="job-entry">
+                    <div class="job-header">
+                        <div>
+                            <div class="job-title">IT Support (Helpdesk)</div>
+                            <div class="job-company">Com7 International Co., Ltd. (Banana IT, iStudio)</div>
+                        </div>
+                        <div class="job-period">2012 - 2014</div>
+                    </div>
+                    <div class="job-description">
+                        <ul>
+                            <li>Provided hardware and software support for corporate offices and retail branches.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Education & Certifications -->
+            <div class="resume-section">
+                <h3 class="section-title">Education</h3>
+                <div class="education-item">
+                    <div class="job-title">Bachelor of Business Computer</div>
+                    <div class="job-company">SUAN DUSIT RAJABHAT University</div>
+                    <div class="job-period">2012</div>
+                </div>
+            </div>
+
+            <div class="resume-section">
+                <h3 class="section-title">Certifications</h3>
+                <div class="cert-item">🏅 Microsoft Azure Fundamentals</div>
+                <div class="cert-item">🍎 Apple Product Professional</div>
+                <div class="cert-item">📋 Requirement for ISO 9001 : 2015</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Password configuration - You can change this password
+        const CORRECT_PASSWORD = "resume123";
+
+        // Login functionality
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('errorMessage');
+            
+            if (password === CORRECT_PASSWORD) {
+                document.getElementById('loginContainer').style.display = 'none';
+                document.getElementById('resumeContainer').style.display = 'block';
+                errorMessage.classList.add('hidden');
+            } else {
+                errorMessage.textContent = 'Incorrect password. Please try again.';
+                errorMessage.classList.remove('hidden');
+                document.getElementById('password').value = '';
+            }
+        });
+
+        // Logout functionality
+        function logout() {
+            document.getElementById('loginContainer').style.display = 'flex';
+            document.getElementById('resumeContainer').style.display = 'none';
+            document.getElementById('password').value = '';
+            document.getElementById('errorMessage').classList.add('hidden');
+        }
+
+        // Image upload functionality
+        function uploadImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const profileImage = document.getElementById('profileImage');
+                    profileImage.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Add some interactive effects
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add hover effects to job entries
+            const jobEntries = document.querySelectorAll('.job-entry');
+            jobEntries.forEach(entry => {
+                entry.addEventListener('mouseenter', function() {
+                    this.style.transform = 'scale(1.02)';
+                    this.style.transition = 'transform 0.2s ease';
+                });
+                entry.addEventListener('mouseleave', function() {
+                    this.style.transform = 'scale(1)';
+                });
+            });
+
+            // Add focus effect to login input
+            const passwordInput = document.getElementById('password');
+            passwordInput.addEventListener('focus', function() {
+                this.parentNode.style.transform = 'scale(1.02)';
+            });
+            passwordInput.addEventListener('blur', function() {
+                this.parentNode.style.transform = 'scale(1)';
+            });
+        });
+
+        // Print functionality
+        function printResume() {
+            window.print();
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'p') {
+                e.preventDefault();
+                printResume();
+            }
+        });
+    </script>
+</body>
+</html>
