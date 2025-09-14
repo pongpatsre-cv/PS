@@ -589,121 +589,127 @@
     </div>
 
    <script>
-        // 1. เพิ่ม Object สำหรับตั้งค่า Cloudinary ไว้ด้านบนสุดของ script
-        const CLOUDINARY_CONFIG = {
-            cloudName: 'ddhtczhcp',
-            uploadPreset: 'pongpatsre-cv'
-        };
+    // Configuration for Cloudinary
+    const CLOUDINARY_CONFIG = {
+        cloudName: 'ddhtczhcp',
+        uploadPreset: 'pongpatsre-cv'
+    };
 
-        // Password configuration - You can change this password
-        const CORRECT_PASSWORD = "ps123";
+    // Password for login
+    const CORRECT_PASSWORD = "resume123";
 
-        // Login functionality
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const password = document.getElementById('password').value;
-            const errorMessage = document.getElementById('errorMessage');
-            
-            if (password === CORRECT_PASSWORD) {
-                document.getElementById('loginContainer').style.display = 'none';
-                document.getElementById('resumeContainer').style.display = 'block';
-                errorMessage.classList.add('hidden');
-            } else {
-                errorMessage.textContent = 'Incorrect password. Please try again.';
-                errorMessage.classList.remove('hidden');
-                document.getElementById('password').value = '';
-            }
+    // --- SCRIPT LOGIC ---
+
+    // 1. แก้ไขส่วนนี้: เพิ่มการโหลดรูปภาพจาก localStorage เมื่อหน้าเว็บพร้อมใช้งาน
+    document.addEventListener('DOMContentLoaded', function() {
+        // Check for a saved image URL in localStorage when the page loads
+        const savedImageUrl = localStorage.getItem('profileImageUrl');
+        if (savedImageUrl) {
+            document.getElementById('profileImage').src = savedImageUrl;
+        }
+
+        // Add hover effects to job entries
+        const jobEntries = document.querySelectorAll('.job-entry');
+        jobEntries.forEach(entry => {
+            entry.addEventListener('mouseenter', function() {
+                this.style.transform = 'scale(1.02)';
+                this.style.transition = 'transform 0.2s ease';
+            });
+            entry.addEventListener('mouseleave', function() {
+                this.style.transform = 'scale(1)';
+            });
         });
 
-        // Logout functionality
-        function logout() {
-            document.getElementById('loginContainer').style.display = 'flex';
-            document.getElementById('resumeContainer').style.display = 'none';
+        // Add focus effect to login input
+        const passwordInput = document.getElementById('password');
+        passwordInput.addEventListener('focus', function() {
+            this.parentNode.style.transform = 'scale(1.02)';
+        });
+        passwordInput.addEventListener('blur', function() {
+            this.parentNode.style.transform = 'scale(1)';
+        });
+    });
+
+    // Login functionality
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const password = document.getElementById('password').value;
+        const errorMessage = document.getElementById('errorMessage');
+        
+        if (password === CORRECT_PASSWORD) {
+            document.getElementById('loginContainer').style.display = 'none';
+            document.getElementById('resumeContainer').style.display = 'block';
+            errorMessage.classList.add('hidden');
+        } else {
+            errorMessage.textContent = 'Incorrect password. Please try again.';
+            errorMessage.classList.remove('hidden');
             document.getElementById('password').value = '';
-            document.getElementById('errorMessage').classList.add('hidden');
+        }
+    });
+
+    // Logout functionality
+    function logout() {
+        document.getElementById('loginContainer').style.display = 'flex';
+        document.getElementById('resumeContainer').style.display = 'none';
+        document.getElementById('password').value = '';
+        document.getElementById('errorMessage').classList.add('hidden');
+    }
+
+    // Image upload functionality
+    function uploadImage(event) {
+        const file = event.target.files[0];
+        if (!file) {
+            return;
         }
 
-        // 2. แก้ไขฟังก์ชัน uploadImage ให้ส่งไฟล์ไปที่ Cloudinary
-        function uploadImage(event) {
-            const file = event.target.files[0];
-            if (!file) {
-                return;
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', CLOUDINARY_CONFIG.uploadPreset);
+
+        const uploadUrl = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CONFIG.cloudName}/image/upload`;
+        
+        const profileImage = document.getElementById('profileImage');
+        const originalSrc = profileImage.src;
+        profileImage.src = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAiIGhlaWdodD0iNTAiIHZpZXdCb3g9IjAgMCA1MCA1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMjUgNGEyMSAyMSAwIDAgMCAwIDQyIDIxIDIxIDAgMCAwIDAtNDJ6bTAgNDBhMTkgMTkgMCAxIDEgMC0zOCAxOSAxOSAwIDAgMSAwIDM4eiIgZmlsbD0iIzY2N2VlYSIgb3BhY2l0eT0iLjMiLz48cGF0aCBkPSJNMjUgNGEyMSAyMSAwIDAgMSAyMSAyMSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNjY3ZWVhIiBzdHJva2Utd2lkdGg9IjQiPjxhbmltYXRlVHJhbnNmb3JtIGF0dHJpYnV0ZU5hbWU9InRyYW5zZm9ybSIgdHlwZT0icm90YXRlIiBmcm9tPSIwIDI1IDI1IiB0bz0iMzYwIDI1IDI1IiBkdXI9IjFzIiByZXBlYXRDb3VudD0iaW5kZWZpbml0ZSIvPjwvcGF0aD48L3N2Zz4=";
+
+        fetch(uploadUrl, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.secure_url) {
+                profileImage.src = data.secure_url;
+                
+                // 2. เพิ่มส่วนนี้: บันทึก URL ลงใน localStorage
+                localStorage.setItem('profileImageUrl', data.secure_url);
+                
+                console.log('Upload successful and URL saved:', data.secure_url);
+            } else {
+                console.error('Upload failed:', data);
+                profileImage.src = originalSrc;
+                alert('Image upload failed. Please check the console for details.');
             }
-
-            // สร้าง FormData เพื่อเตรียมส่งไฟล์
-            const formData = new FormData();
-            formData.append('file', file);
-            formData.append('upload_preset', CLOUDINARY_CONFIG.uploadPreset);
-
-            const uploadUrl = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CONFIG.cloudName}/image/upload`;
-            
-            // แสดงสถานะกำลังอัปโหลด (ทางเลือก)
-            const profileImage = document.getElementById('profileImage');
-            const originalSrc = profileImage.src; // เก็บ src เดิมไว้
-            profileImage.src = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAiIGhlaWdodD0iNTAiIHZpZXdCb3g9IjAgMCA1MCA1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMjUgNGEyMSAyMSAwIDAgMCAwIDQyIDIxIDIxIDAgMCAwIDAtNDJ6bTAgNDBhMTkgMTkgMCAxIDEgMC0zOCAxOSAxOSAwIDAgMSAwIDM4eiIgZmlsbD0iIzY2N2VlYSIgb3BhY2l0eT0iLjMiLz48cGF0aCBkPSJNMjUgNGEyMSAyMSAwIDAgMSAyMSAyMSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNjY3ZWVhIiBzdHJva2Utd2lkdGg9IjQiPjxhbmltYXRlVHJhbnNmb3JtIGF0dHJpYnV0ZU5hbWU9InRyYW5zZm9ybSIgdHlwZT0icm90YXRlIiBmcm9tPSIwIDI1IDI1IiB0bz0iMzYwIDI1IDI1IiBkdXI9IjFzIiByZXBlYXRDb3VudD0iaW5kZWZpbml0ZSIvPjwvcGF0aD48L3N2Zz4=";
-
-
-            // ส่ง Request ไปยัง Cloudinary API
-            fetch(uploadUrl, {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.secure_url) {
-                    // อัปเดต src ของรูปภาพด้วย URL จาก Cloudinary
-                    profileImage.src = data.secure_url;
-                    console.log('Upload successful:', data.secure_url);
-                } else {
-                    // หากมีข้อผิดพลาด
-                    console.error('Upload failed:', data);
-                    profileImage.src = originalSrc; // คืนค่ารูปเดิม
-                    alert('Image upload failed. Please check the console for details.');
-                }
-            })
-            .catch(error => {
-                console.error('Error uploading image:', error);
-                profileImage.src = originalSrc; // คืนค่ารูปเดิม
-                alert('An error occurred during upload.');
-            });
-        }
-
-        // Add some interactive effects
-        document.addEventListener('DOMContentLoaded', function() {
-            // Add hover effects to job entries
-            const jobEntries = document.querySelectorAll('.job-entry');
-            jobEntries.forEach(entry => {
-                entry.addEventListener('mouseenter', function() {
-                    this.style.transform = 'scale(1.02)';
-                    this.style.transition = 'transform 0.2s ease';
-                });
-                entry.addEventListener('mouseleave', function() {
-                    this.style.transform = 'scale(1)';
-                });
-            });
-
-            // Add focus effect to login input
-            const passwordInput = document.getElementById('password');
-            passwordInput.addEventListener('focus', function() {
-                this.parentNode.style.transform = 'scale(1.02)';
-            });
-            passwordInput.addEventListener('blur', function() {
-                this.parentNode.style.transform = 'scale(1)';
-            });
+        })
+        .catch(error => {
+            console.error('Error uploading image:', error);
+            profileImage.src = originalSrc;
+            alert('An error occurred during upload.');
         });
+    }
 
-        // Print functionality
-        function printResume() {
-            window.print();
+    // Print functionality
+    function printResume() {
+        window.print();
+    }
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+        if (e.ctrlKey && e.key === 'p') {
+            e.preventDefault();
+            printResume();
         }
-
-        // Keyboard shortcuts
-        document.addEventListener('keydown', function(e) {
-            if (e.ctrlKey && e.key === 'p') {
-                e.preventDefault();
-                printResume();
-            }
-        });
-    </script>
+    });
+</script>
 </body>
 </html>
